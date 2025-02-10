@@ -1,4 +1,13 @@
-import { useEffect, useState } from 'react'
+import AppRouter from './Routes/AppRouter';
+
+function App() {
+  return <AppRouter />;
+}
+
+export default App;
+
+
+/*import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
@@ -14,9 +23,9 @@ function App() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>{message}</h1>  {/* Muestra el mensaje de Django */}
+      <h1>{message}</h1>  {/* Muestra el mensaje de Django *//*}
     </div>
   )
 }
 
-export default App
+export default App*/
