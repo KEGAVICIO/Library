@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'libreria',  # Reemplaza con el nombre de tu BD
+        'USER': 'root',  # Usuario de MySQL
+        'PASSWORD': 'kega1007',  # Contraseña de MySQL
+        'HOST': 'localhost',  # Servidor de la BD (cambia si usas otro host)
+        'PORT': '3306',  # Puerto de MySQL (3306 por defecto)
     }
 }
 

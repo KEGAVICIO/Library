@@ -1,0 +1,54 @@
+CREATE TABLE usuarios (
+    Id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Usuario VARCHAR(50) NOT NULL,
+    Contra VARCHAR(64) NOT NULL,
+    Correo VARCHAR(50) NOT NULL,
+    Estado VARCHAR(1) NOT NULL DEFAULT '0' CHECK (Estado IN ('0', '1')),
+    Perfil VARCHAR(2) NOT NULL DEFAULT '4' CHECK (Perfil IN ('1', '2', '3', '4')),
+    AltaReg DATE NOT NULL DEFAULT (CURRENT_DATE),
+    UsuarioAlt VARCHAR(50) NOT NULL
+);
+
+ALTER TABLE usuarios MODIFY AltaReg DATE NOT NULL DEFAULT (CURRENT_DATE);
+
+DELIMITER $$
+
+CREATE TRIGGER before_insert_usuario
+BEFORE INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+    SET NEW.Contra = SHA2(NEW.Contra, 256);
+END$$
+
+DELIMITER ;
+
+INSERT INTO usuarios (Usuario, Contra, Correo, Perfil, UsuarioAlt) VALUES ('KEGA', 'blacksheep', 'kega5586@gmail.com', '1', 'Master');
+INSERT INTO usuarios (Usuario, Contra, Correo, Perfil, UsuarioAlt) VALUES ('BNGA', 'blacksheep', 'kega2@gmail.com', '3', 'Master');
+INSERT INTO usuarios (Usuario, Contra, Correo, Perfil, UsuarioAlt) VALUES ('GUILLE', 'blacksheep', 'kega2@gmail.com', '3', 'Master');
+INSERT INTO usuarios (Usuario, Contra, Correo, Perfil, UsuarioAlt) VALUES ('JUAN', 'blacksheep', 'kega3@gmail.com', '4', 'Master');
+
+
+CREATE TABLE libros (
+    IdLibro INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Titulo VARCHAR(255) NOT NULL,
+    Autor VARCHAR(100) NOT NULL,
+    Resena TEXT NOT NULL,
+    Vistas INT NOT NULL DEFAULT 1,
+    Estado VARCHAR(1) NOT NULL DEFAULT '0' CHECK (Estado IN ('0', '1')),
+    UsuarioAlt VARCHAR(50) NOT NULL,
+    AltaReg DATE NOT NULL DEFAULT (CURRENT_DATE)
+);
+
+CREATE TABLE opiniones (
+    IdOpinion INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    UsuarioAlt VARCHAR(50) NOT NULL,
+    Opinion TEXT NOT NULL,
+    IdLibro INT NOT NULL,
+    Estado VARCHAR(1) NOT NULL DEFAULT '0' CHECK (Estado IN ('0', '1')),
+    AltaReg DATE NOT NULL DEFAULT (CURRENT_DATE),
+    FOREIGN KEY (IdLibro) REFERENCES libros(IdLibro)
+);
+
+
+// vamos a poner el auto incrementable en la parte del back 
+UPDATE libros SET Vistas = Vistas + 1 WHERE IdLibro = 1;
