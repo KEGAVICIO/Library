@@ -22,10 +22,13 @@ function SearchBar({ onSearch }) {
           <span class="material-icons">search</span>
         </button>
         <button className="upload-button">
-        <span class="material-icons">file_upload</span>
+          <span class="material-icons">file_upload</span>
         </button>
         <button className="profile-button">
-        <span class="material-icons">account_circle</span>
+          <span class="material-icons">account_circle</span>
+        </button>
+        <button className="settings-button">
+          <span class="material-icons">settings</span>
         </button>
       </div>
     </nav>

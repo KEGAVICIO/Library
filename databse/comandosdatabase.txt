@@ -9,6 +9,8 @@ CREATE TABLE usuarios (
     UsuarioAlt VARCHAR(50) NOT NULL
 );
 
+//1 = Admin, 2 = Editor, 3 = Lector, 4 = visitante
+
 ALTER TABLE usuarios MODIFY AltaReg DATE NOT NULL DEFAULT (CURRENT_DATE);
 
 DELIMITER $$

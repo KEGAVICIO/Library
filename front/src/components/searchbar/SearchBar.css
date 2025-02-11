@@ -32,7 +32,8 @@
 /* Ajuste general para los botones */
 .search-button,
 .upload-button,
-.profile-button {
+.profile-button,
+.settings-button {
   background-color: var(--fondooscuro);
   border: none;
   padding: 8px 12px;
@@ -45,7 +46,8 @@
 /* Efecto hover */
 .search-button:hover,
 .upload-button:hover,
-.profile-button:hover {
+.profile-button:hover,
+.settings-button:hover {
   background-color: var(--botones);
 }
 
