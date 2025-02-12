@@ -22,13 +22,14 @@ def login_view(request):
 
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT Id FROM usuarios WHERE Usuario = %s AND Contra = %s AND Estado = '0'",
+            "SELECT Id, Usuario, Perfil FROM usuarios WHERE Usuario = %s AND Contra = %s AND Estado = '0'",
             [username, hashed_password]
         )
         user = cursor.fetchone()
 
     if user:
-        return Response({"message": "Login exitoso"}, status=200)
+        id, usuario, perfil = user
+        return Response({"message": "Login exitoso", "perfil": perfil, "usuario": usuario, "id": id}, status=200)
     else:
         return Response({"message": "Credenciales incorrectas"}, status=401)
 

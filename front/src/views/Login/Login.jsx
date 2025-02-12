@@ -18,8 +18,12 @@ function Login() {
     });
   
     const data = await response.json();
+    console.log("respuesta back ", data.perfil)
   
     if (response.ok) {
+      //enviar a la searchbar
+      localStorage.setItem("perfil", data.perfil);
+      
       navigate("/books"); // Redirige si el login es exitoso
     } else {
       setErrorMessage("No se puede iniciar sessión"); // Muestra el mensaje de error
