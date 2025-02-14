@@ -35,25 +35,32 @@ def login_view(request):
 
 
 #aqui es para registrarnos
-
 @api_view(["POST"])
 def register_user(request):
-    username = request.data.get("username")
-    password = request.data.get("password")
-    email = request.data.get("email")
-    role = request.data.get("perfil", "visitante")  # Recibir perfil desde el frontend
-    usuario_alt = "Sistema"  # Usuario que da de alta, puedes modificarlo
+    username = request.data.get("username", "").strip().upper()
+    password = request.data.get("password", "").strip()
+    email = request.data.get("email", "").strip()
+    role = request.data.get("perfil", "").strip()  # Recibir perfil desde el frontend
+
+     # Validación de campos obligatorios
+    if not username or not password or not email:
+        return Response({"message": "Todos los campos son obligatorios"}, status=400)
+
+    if request.user.is_authenticated:
+        usuario_alt = request.user.username.upper()
+    else:
+        usuario_alt = "SISTEMA"
 
     # Convertir el rol al número correspondiente
     perfil = ROLES_MAP.get(role, "4")  # Si no encuentra el rol, usa "4" (visitante)
 
     # Validar si el usuario ya existe
     with connection.cursor() as cursor:
-        cursor.execute("SELECT Id FROM usuarios WHERE Usuario = %s", [username])
+        cursor.execute("SELECT Id FROM usuarios WHERE Usuario = %s OR Correo = %s", [username, email])
         existing_user = cursor.fetchone()
 
     if existing_user:
-        return Response({"message": "El usuario ya existe"}, status=400)
+        return Response({"message": "Usuario o correo ya están en uso"}, status=400)
 
     # Insertar en la base de datos
     try:
@@ -63,8 +70,8 @@ def register_user(request):
                 INSERT INTO usuarios (Usuario, Contra, Correo, Perfil, UsuarioAlt)
                 VALUES (%s, %s, %s, %s, %s)
                 """,
-                [username, password, email, perfil, username]
+                [username, password, email, perfil, usuario_alt]
             )
-        return Response({"message": "Usuario registrado con éxito"}, status=201)
+        return Response({"message": "Registro exitoso"}, status=201)
     except Exception as e:
-        return Response({"message": "Error al registrar usuario", "error": str(e)}, status=400)
+        return Response({"message": "Error al registrar usuario"}, status=400)

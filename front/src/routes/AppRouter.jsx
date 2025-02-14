@@ -3,6 +3,7 @@ import Login from "../views/Login/Login";
 import Books from "../views/Books/Books";
 import Register from "../views/Register/Register";
 import SearchBar from "../components/searchbar/SearchBar";
+import Settings from "../views/Settings/Settings";
 
 function AppContent() {
     const location = useLocation(); // Obtiene la ruta actual
@@ -20,6 +21,7 @@ function AppContent() {
                 <Route path="/" element={<Login />} />
                 <Route path="/registre" element={<Register />} />
                 <Route path="/books" element={<Books />} />
+                <Route path="/settings" element={<Settings />} />
             </Routes>
         </div>
     );
