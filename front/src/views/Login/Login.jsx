@@ -18,7 +18,6 @@ function Login() {
     });
   
     const data = await response.json();
-    console.log("respuesta back ", data.perfil)
   
     if (response.ok) {
       //enviar a la searchbar
@@ -51,7 +50,7 @@ function Login() {
                     type="text"
                     placeholder="Usuario"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value.toUpperCase())}
                 />
                 </div>
 

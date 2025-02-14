@@ -33,7 +33,8 @@
 .search-button,
 .upload-button,
 .profile-button,
-.settings-button {
+.settings-button,
+.close-session {
   background-color: var(--fondooscuro);
   border: none;
   padding: 8px 12px;
@@ -47,7 +48,8 @@
 .search-button:hover,
 .upload-button:hover,
 .profile-button:hover,
-.settings-button:hover {
+.settings-button:hover,
+.close-session:hover {
   background-color: var(--botones);
 }
 

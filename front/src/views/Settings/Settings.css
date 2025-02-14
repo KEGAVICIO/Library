@@ -1,0 +1,53 @@
+/* Asegura que `html` y `body` ocupen toda la pantalla sin scroll */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Evita el desplazamiento global */
+}
+
+/* Contenedor principal ocupa el 95% del ancho de la pantalla */
+.space {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 33px; /* Ajusta esto según la altura de la barra de búsqueda */
+    height: calc(100vh - 33px); /* Usa `100vh` en lugar de `100%` para asegurar altura correcta */
+    overflow: hidden; /* Evita el desplazamiento */
+}
+
+/* Contenedor de columnas */
+.columns {
+    display: flex;
+    width: 100%;
+    height: 90%; /* Usa 100% para que se ajuste correctamente */
+    gap: 15px;
+}
+
+/* Columna izquierda (70%) */
+.left-column {
+    flex: 7;
+    background-color: var(--fondooscuro);
+    padding: 20px;
+    border-radius: 8px;
+    overflow: auto; /* Si el contenido es demasiado grande, solo esta columna tendrá scroll */
+}
+
+/* Columna derecha (30%) */
+.right-column {
+    flex: 3;
+    background-color: var(--fondooscuro);
+    padding: 20px;
+    border-radius: 8px;
+    overflow: auto; /* Si hay contenido grande, solo esta columna tendrá scroll */
+}
+
+.card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 15px;
+}
+
