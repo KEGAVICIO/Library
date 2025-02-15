@@ -15,11 +15,10 @@
   --letters: #333333;
   --fondo: #F4ECDC;
   --fondooscuro: #E5DDCB;
+  --botones: #bdb6a7;
   --terracota: #B5651D;
   --black: #000000;
-  --card: #8B4513;
-  --carlight : #A67B5B;
-  --botones: #bdb6a7;
+  
 }
 
 body {
