@@ -9,6 +9,14 @@ ROLES_MAP = {
     "visitante": "4",
     "lector": "3",
     "editor": "2",
+    "administrador": "1",
+}
+
+DATS_MAP = {
+    "4": "visitante",
+    "3": "lector",
+    "2": "editor",
+    "1": "administrador",
 }
 
 #aqui accedemos a la pagina
@@ -75,3 +83,27 @@ def register_user(request):
         return Response({"message": "Registro exitoso"}, status=201)
     except Exception as e:
         return Response({"message": "Error al registrar usuario"}, status=400)
+    
+
+#para consultar los usuarios
+@api_view(["GET"])
+def get_users(request):
+    # Consultar todos los usuarios en la base de datos
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT Usuario, Correo, Perfil, Contra 
+            FROM usuarios
+        """)
+        users = cursor.fetchall()
+
+    # Convertir la respuesta a JSON
+    user_list = [
+        {
+            "username": user[0],
+            "email": user[1],
+            "perfil": DATS_MAP.get(str(user[2]), "Desconocido"),  # Convertir el número del perfil a texto
+        }
+        for user in users
+    ]
+
+    return Response(user_list, status=200)

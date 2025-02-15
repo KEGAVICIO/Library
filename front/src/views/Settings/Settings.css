@@ -31,8 +31,35 @@ html, body {
     background-color: var(--fondooscuro);
     padding: 20px;
     border-radius: 8px;
-    overflow: auto; /* Si el contenido es demasiado grande, solo esta columna tendrá scroll */
+    overflow: auto; /* Permite scroll si hay muchas tarjetas */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas de igual tamaño */
+    gap: 10px 15px; /* Espaciado entre tarjetas: 10px entre filas y 15px entre columnas */
 }
+
+.card {
+    background-color: var(--fondo);
+    color: var(--letters);
+    padding: 15px; /* Ajusta el padding dentro de la tarjeta para más espacio */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    min-width: 180px; /* Ancho mínimo */
+    max-width: 200px; /* Limita el tamaño máximo */
+    text-align: center; /* Centra el texto */
+    display: flex;
+    flex-direction: column;
+    align-items: left; /* Alinea el contenido horizontalmente al centro */
+    justify-content: center; /* Centra el contenido verticalmente */
+    margin: 0; /* Asegura que no haya márgenes adicionales */
+}
+
+.dcard {
+    display: flex;
+    align-items: center; /* Centra verticalmente el icono y el texto */
+    gap: 8px; /* Ajusta el espacio entre el icono y el texto */
+    margin: 5px 0; /* Espaciado entre las líneas */
+}
+
 
 /* Columna derecha (30%) */
 .right-column {
@@ -41,13 +68,33 @@ html, body {
     padding: 20px;
     border-radius: 8px;
     overflow: auto; /* Si hay contenido grande, solo esta columna tendrá scroll */
+    
+    display: flex;
+    flex-direction: column; /* Organiza los elementos en columna */
+    align-items: stretch;
 }
 
-.card {
-    background-color: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    margin-top: 15px;
+.dats {
+    font-size: 30px;
+    padding-left: 30px;
 }
 
+/* Contenedor de los inputs */
+.input-group {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    margin: 8px 0;
+    background: white;
+    appearance: none; /* Oculta la flecha nativa en algunos navegadores */
+    cursor: pointer;
+}
