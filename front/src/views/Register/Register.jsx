@@ -7,17 +7,9 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [usuarioAlt, setUsuarioAlt] = useState("SISTEMA"); // Valor por defecto
+  const [usuarioAlt] = useState("SISTEMA"); // Valor por defecto
   const [errorMessage, setErrorMessage] = useState(""); // Estado del mensaje de error
   const navigate = useNavigate();
-
-  // Obtener el usuario que está autenticado si existe
-  useEffect(() => {
-    const loggedUser = localStorage.getItem("username"); // Suponiendo que el username está guardado en localStorage
-    if (loggedUser) {
-      setUsuarioAlt(loggedUser.toUpperCase());
-    }
-  }, []);
 
   const handleRegister = async (e) => {
     e.preventDefault();

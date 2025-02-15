@@ -98,3 +98,27 @@ html, body {
     appearance: none; /* Oculta la flecha nativa en algunos navegadores */
     cursor: pointer;
 }
+
+.botones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.botones button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--terracota);
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    opacity: 0.8;
+}
