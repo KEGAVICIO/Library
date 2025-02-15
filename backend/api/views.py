@@ -107,3 +107,38 @@ def get_users(request):
     ]
 
     return Response(user_list, status=200)
+
+# Actualizar usuario
+@api_view(["PUT"])
+def update_user(request, username):
+    new_username = request.data.get("username", "").strip().upper()
+    password = request.data.get("password", "").strip()
+    email = request.data.get("email", "").strip()
+    role = request.data.get("perfil", "").strip()
+    usuario_alt = request.data.get("usuarioAlt", "SISTEMA").strip().upper()
+
+    print(f"Datos recibidos en el backend: {request.data}")
+    if not new_username or not email or not role:
+        return Response({"message": "Usuario, correo y rol son obligatorios"}, status=400)
+
+    perfil = ROLES_MAP.get(role, "4")
+
+    try:
+        with connection.cursor() as cursor:
+            if password:
+                hashed_password = hashlib.sha256(password.encode()).hexdigest()
+                cursor.execute("""
+                    UPDATE usuarios 
+                    SET Usuario = %s, Contra = %s, Correo = %s, Perfil = %s, UsuarioAlt = %s
+                    WHERE Usuario = %s
+                """, [new_username, hashed_password, email, perfil, usuario_alt, username])
+            else:
+                cursor.execute("""
+                    UPDATE usuarios 
+                    SET Usuario = %s, Correo = %s, Perfil = %s, UsuarioAlt = %s
+                    WHERE Usuario = %s
+                """, [new_username, email, perfil, usuario_alt, username])
+
+        return Response({"message": "Usuario actualizado correctamente"}, status=200)
+    except Exception:
+        return Response({"message": "Error al actualizar usuario"}, status=400)

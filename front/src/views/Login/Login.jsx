@@ -22,6 +22,8 @@ function Login() {
     if (response.ok) {
       //enviar a la searchbar
       localStorage.setItem("perfil", data.perfil);
+      localStorage.setItem("usuario", data.usuario);
+
       
       navigate("/books"); // Redirige si el login es exitoso
     } else {
