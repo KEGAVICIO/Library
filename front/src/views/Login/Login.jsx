@@ -42,7 +42,7 @@ function Login() {
 
         <div className="login-container">
             <form onSubmit={handleLogin} className="login-form">
-                <h2>Inicia Sesión</h2>
+                <h2 className="pestana">Inicia Sesión</h2>
 
                 {/* Muestra el mensaje de error debajo de los botones si hay error */}
                 {errorMessage && <p className="error-message">{errorMessage}</p>}

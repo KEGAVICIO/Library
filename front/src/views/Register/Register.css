@@ -38,7 +38,7 @@
     max-width: 500px;
 }
 
-.register-form h2 {
+.pestana {
     margin-top: 0; /* Elimina el margen superior */
     margin-bottom: 20px;
     font-size: 50px;
@@ -91,4 +91,9 @@
 .input-error {
     border: 2px solid red;
     background-color: #ffe6e6;
+}
+
+.volver {
+    color: white;
+    background-color: var(--terracota);
 }
