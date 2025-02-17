@@ -55,7 +55,7 @@ function Register() {
 
       <div className="register-container">
         <form onSubmit={handleRegister} className="register-form">
-          <h2>Regístrate</h2>
+          <h2 className="pestana">Regístrate</h2>
           
           {/* Muestra el mensaje de error si existe */}
           {errorMessage && <p className="error-message">{errorMessage}</p>}
