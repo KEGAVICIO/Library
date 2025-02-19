@@ -91,7 +91,7 @@ def get_users(request):
     # Consultar todos los usuarios en la base de datos
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT Usuario, Correo, Perfil, Contra 
+            SELECT Usuario, Correo, Perfil, Contra, Estado 
             FROM usuarios
         """)
         users = cursor.fetchall()
@@ -102,6 +102,7 @@ def get_users(request):
             "username": user[0],
             "email": user[1],
             "perfil": DATS_MAP.get(str(user[2]), "Desconocido"),  # Convertir el número del perfil a texto
+            "estado": user[4]
         }
         for user in users
     ]
@@ -116,8 +117,8 @@ def update_user(request, username):
     email = request.data.get("email", "").strip()
     role = request.data.get("perfil", "").strip()
     usuario_alt = request.data.get("usuarioAlt", "SISTEMA").strip().upper()
+    estado = request.data.get("estado", None)
 
-    print(f"Datos recibidos en el backend: {request.data}")
     if not new_username or not email or not role:
         return Response({"message": "Usuario, correo y rol son obligatorios"}, status=400)
 
@@ -125,7 +126,15 @@ def update_user(request, username):
 
     try:
         with connection.cursor() as cursor:
-            if password:
+            if estado is not None:  # Si se envía el estado, actualizarlo
+                cursor.execute("""
+                    UPDATE usuarios 
+                    SET Estado = %s, UsuarioAlt = %s
+                    WHERE Usuario = %s AND Correo = %s
+                """, [estado, usuario_alt, username, email])
+
+
+            elif password:
                 hashed_password = hashlib.sha256(password.encode()).hexdigest()
                 cursor.execute("""
                     UPDATE usuarios 
