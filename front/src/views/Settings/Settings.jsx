@@ -10,6 +10,8 @@ function Settings() {
   const [usuarioAlt, setUsuarioAlt] = useState(""); // Usuario que realiza la acción
   const [errorMessage, setErrorMessage] = useState(""); // Mensajes de error
   const [isEditing, setIsEditing] = useState(false); // Modo edición
+  const [userState, setUserState] = useState(null);
+
   useEffect(() => {
     const loggedUser = localStorage.getItem("usuario");
     if (loggedUser) {
@@ -29,6 +31,7 @@ function Settings() {
     setEmail(user.email);
     setRole(user.perfil);
     setPassword(""); // Limpiar campo de contraseña
+    setUserState(Number(user.estado));
     setIsEditing(true);
   };
 
@@ -41,15 +44,51 @@ function Settings() {
     setErrorMessage(""); // Opcional, si quieres limpiar los mensajes de error
   };
 
+  const handleToggleUserState = async () => {
+    
+    if (!username || !email || !role) {
+      setErrorMessage("Faltan datos del usuario.");
+      return;
+    }
+  
+    const newState = userState === 0 ? 1 : 0; // Alternar entre activo e inactivo
+  
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/users/${username}/`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username, // Mantener el nombre de usuario
+          email,    // Enviar correo
+          perfil: role, // Enviar rol
+          estado: newState, // Estado nuevo
+          usuarioAlt, // Usuario que realiza la acción
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setErrorMessage(newState === 0 ? "Usuario activado" : "Usuario desactivado");
+        setUserState(newState); // Actualizar estado en la UI
+  
+        // Recargar usuarios
+        fetch("http://127.0.0.1:8000/api/users/")
+          .then((response) => response.json())
+          .then((data) => setUsers(data))
+          .catch((error) => console.error("Error al obtener usuarios:", error));
+      } else {
+        setErrorMessage(data.message || "Error al actualizar el estado del usuario.");
+      }
+    } catch (error) {
+      setErrorMessage("Error al conectar con el servidor.");
+    }
+  };
+  
+
   // Manejar el registro o actualización
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("Valores actuales:");
-  console.log("Username:", username);
-  console.log("Email:", email);
-  console.log("Role:", role);
-  console.log("Usuario que realiza la acción:", usuarioAlt);
 
     if (!username || !email || !role) {
       setErrorMessage("Usuario, correo y rol son obligatorios.");
@@ -114,7 +153,10 @@ function Settings() {
       <div className="columns">
         <div className="left-column">
           {users.map((user, index) => (
-            <div className="card" key={index} onClick={() => handleCardClick(user)}>
+            <div 
+            className={`card ${user.estado === "1" ? "inactive" : ""}`} 
+            key={index} 
+            onClick={() => handleCardClick(user)}>
               <p className="dcard">
                 <span className="material-icons">account_circle</span>{" "}
                 <strong>{user.username}</strong>
@@ -131,7 +173,7 @@ function Settings() {
 
         <div className="right-column">
           <div className="dats">
-            <h2>{isEditing ? "Actualizar usuario" : "Registrar nuevo usuario"}</h2>
+            <h2>{isEditing ? "Actualizar usuario" : "Registrar usuario"}</h2>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -175,7 +217,9 @@ function Settings() {
 
             <div className="botones">
               <button type="submit" className="button">{isEditing ? "Actualizar" : "Registrar"}</button>
-              <button type="delete" className="button">Eliminar</button>
+              <button type="button" className="button" onClick={handleToggleUserState} disabled={!isEditing}
+              style={{ cursor: !isEditing ? "not-allowed" : "pointer", opacity: !isEditing ? 0.5 : 1 }}>
+              {userState === 0 ? "Eliminar" : "Activar"}</button>
               <button type="button" className="button" onClick={handleClear}>Limpiar</button>
             </div>
           </form>
