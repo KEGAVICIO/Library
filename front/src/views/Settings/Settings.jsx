@@ -7,24 +7,63 @@ function Settings() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [usuarioAlt, setUsuarioAlt] = useState(""); // Usuario que realiza la acción
   const [errorMessage, setErrorMessage] = useState(""); // Mensajes de error
   const [isEditing, setIsEditing] = useState(false); // Modo edición
   const [userState, setUserState] = useState(null);
 
-  useEffect(() => {
-    const loggedUser = localStorage.getItem("usuario");
-    if (loggedUser) {
-      setUsuarioAlt(loggedUser.toUpperCase());
-    }
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState(""); // "success" o "error"
 
-    // Obtener usuarios
-    fetch("http://127.0.0.1:8000/api/users/")
-      .then((response) => response.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.error("Error al obtener usuarios:", error));
+  const [filterUsername, setFilterUsername] = useState("");
+  const [filterEmail, setFilterEmail] = useState("");
+  const [filterRole, setFilterRole] = useState("");
+  const [filterUserState, setFilterUserState] = useState(null);
+
+
+
+  useEffect(() => {  
+    fetchAllUsers(); // Llama a la función al cargar la página
   }, []);
+  const fetchAllUsers = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/users/");
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error al obtener usuarios:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchFilteredUsers();
+  }, [filterUsername, filterEmail, filterRole, filterUserState]);
+
+  const fetchFilteredUsers = async () => {
+    try {
+      // Si no hay filtros, usar fetchAllUsers directamente
+      if (!filterUsername && !filterEmail && !filterRole && !filterUserState) {
+        await fetchAllUsers();
+        return;
+      }
+  
+      const queryParams = new URLSearchParams();
+      
+      // Solo agregar parámetros si tienen valor
+      if (filterUsername) queryParams.append("username", filterUsername.toLowerCase());
+      if (filterEmail) queryParams.append("email", filterEmail);
+      if (filterRole) queryParams.append("perfil", filterRole);
+      if (filterUserState) queryParams.append("estado", filterUserState);
+  
+      const response = await fetch(`http://127.0.0.1:8000/api/users/?${queryParams.toString()}`);
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error al filtrar usuarios:", error);
+      setUsers([]); // Limpiar usuarios en caso de error
+    }
+  };
+    
+  
   // Manejar la selección de una tarjeta para editar usuario
   const handleCardClick = (user) => {
     setUsername(user.username);
@@ -35,6 +74,16 @@ function Settings() {
     setIsEditing(true);
   };
 
+  const showAlert = (message, type) => {
+    setAlertMessage(message);
+    setAlertType(type);
+  
+    setTimeout(() => {
+      setAlertMessage("");
+      setAlertType("");
+    }, 1000);
+  };
+  
   const handleClear = () => {
     setUsername("");
     setEmail("");
@@ -47,7 +96,7 @@ function Settings() {
   const handleToggleUserState = async () => {
     
     if (!username || !email || !role) {
-      setErrorMessage("Faltan datos del usuario.");
+      showAlert("Faltan datos del usuario.");
       return;
     }
   
@@ -69,7 +118,7 @@ function Settings() {
       const data = await response.json();
   
       if (response.ok) {
-        setErrorMessage(newState === 0 ? "Usuario activado" : "Usuario desactivado");
+        showAlert(newState === 0 ? "Usuario activado" : "Usuario desactivado");
         setUserState(newState); // Actualizar estado en la UI
   
         // Recargar usuarios
@@ -78,10 +127,10 @@ function Settings() {
           .then((data) => setUsers(data))
           .catch((error) => console.error("Error al obtener usuarios:", error));
       } else {
-        setErrorMessage(data.message || "Error al actualizar el estado del usuario.");
+        showAlert(data.message || "Error al actualizar el estado del usuario.");
       }
     } catch (error) {
-      setErrorMessage("Error al conectar con el servidor.");
+      showAlert("Error al conectar con el servidor.");
     }
   };
   
@@ -91,12 +140,12 @@ function Settings() {
     e.preventDefault();
 
     if (!username || !email || !role) {
-      setErrorMessage("Usuario, correo y rol son obligatorios.");
+      showAlert("Usuario, correo y rol son obligatorios.");
       return;
     }
 
     if (!isEditing && !password) {
-      setErrorMessage("La contraseña es obligatoria para el registro.");
+      showAlert("La contraseña es obligatoria para el registro.");
       return;
     }
 
@@ -127,7 +176,7 @@ function Settings() {
       const data = await response.json();
 
       if (response.ok) {
-        setErrorMessage(isEditing ? "Usuario actualizado correctamente" : "Registro exitoso");
+        showAlert(isEditing ? "Usuario actualizado" : "Registro exitoso");
         // Resetear formulario
         setUsername("");
         setEmail("");
@@ -141,10 +190,10 @@ function Settings() {
           .then((data) => setUsers(data))
           .catch((error) => console.error("Error al obtener usuarios:", error));
       } else {
-        setErrorMessage(data.message || "Error al procesar la solicitud");
+        showAlert(data.message || "Error al procesar la solicitud");
       }
     } catch (error) {
-      setErrorMessage("Error al procesar la solicitud");
+      showAlert("Error al procesar la solicitud");
     }
   };
 
@@ -152,6 +201,87 @@ function Settings() {
     <div className="space">
       <div className="columns">
         <div className="left-column">
+          <div className="filters">
+            <input
+              type="text"
+              placeholder="Usuario"
+              value={filterUsername}
+              onChange={(e) => {
+                setFilterUsername(e.target.value);
+                // Forzar la actualización inmediata cuando se borra el texto
+                if (!e.target.value) {
+                  fetchAllUsers();
+                }
+              }}
+              onBlur={fetchFilteredUsers}
+            />
+          </div>
+          <div className="filters">
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={filterEmail}
+              onChange={(e) => {
+                setFilterEmail(e.target.value);
+                if (!e.target.value){
+                  fetchAllUsers();
+                }
+              }}
+              onBlur={fetchFilteredUsers}
+            />
+          </div>
+          <div className="filters">
+            <select
+              value={filterRole}
+              onChange={(e) => {
+                setFilterRole(e.target.value);
+                if (!e.target.value){
+                  fetchAllUsers();
+                }
+              }}
+              onBlur={fetchFilteredUsers}
+            >
+              <option value="">Selecciona un rol</option>
+              <option value="visitante">Visitante</option>
+              <option value="lector">Lector</option>
+              <option value="editor">Editor</option>
+              <option value="administrador">Administrador</option>
+            </select>
+          </div>
+          <div className="filters">
+            <label>
+              <input
+                type="checkbox"
+                checked={filterUserState === "1"}
+                onChange={(e) => {
+                  const newState = e.target.checked ? "1" : null;
+                  setFilterUserState(newState);
+                  if (!newState){
+                    fetchAllUsers();
+                  }
+                }}
+                onBlur={fetchFilteredUsers}
+              />
+              Eliminados
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={filterUserState === "0"}
+                onChange={(e) => {
+                  const newState = e.target.checked ? "0" : null;
+                  setFilterUserState(newState);
+                  if (!newState){
+                    fetchAllUsers();
+                  }
+                }}
+                onBlur={fetchFilteredUsers}
+              />
+              Activos
+            </label>
+          </div>
+
           {users.map((user, index) => (
             <div 
             className={`card ${user.estado === "1" ? "inactive" : ""}`} 
@@ -175,7 +305,11 @@ function Settings() {
           <div className="dats">
             <h2>{isEditing ? "Actualizar usuario" : "Registrar usuario"}</h2>
           </div>
-
+            {alertMessage && (
+            <div className={`alert-box ${alertType}`}>
+              {alertMessage}
+            </div>
+            )}
           <form onSubmit={handleSubmit}>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
@@ -216,10 +350,12 @@ function Settings() {
             </div>
 
             <div className="botones">
-              <button type="submit" className="button">{isEditing ? "Actualizar" : "Registrar"}</button>
+              <button type="submit" className="button" disabled={userState === 1}
+                style={{ cursor: userState === 1 ? "not-allowed" : "pointer", opacity: userState === 1 ? 0.5 : 1 }}>
+                {isEditing ? "Actualizar" : "Registrar"}</button>
               <button type="button" className="button" onClick={handleToggleUserState} disabled={!isEditing}
-              style={{ cursor: !isEditing ? "not-allowed" : "pointer", opacity: !isEditing ? 0.5 : 1 }}>
-              {userState === 0 ? "Eliminar" : "Activar"}</button>
+                style={{ cursor: !isEditing ? "not-allowed" : "pointer", opacity: !isEditing ? 0.5 : 1 }}>
+                {userState === 0 ? "Eliminar" : "Activar"}</button>
               <button type="button" className="button" onClick={handleClear}>Limpiar</button>
             </div>
           </form>

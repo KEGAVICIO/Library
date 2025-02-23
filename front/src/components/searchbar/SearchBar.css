@@ -34,7 +34,8 @@
 .upload-button,
 .profile-button,
 .settings-button,
-.close-session {
+.close-session,
+.Home-button {
   background-color: var(--fondooscuro);
   border: none;
   padding: 8px 12px;
@@ -49,7 +50,8 @@
 .upload-button:hover,
 .profile-button:hover,
 .settings-button:hover,
-.close-session:hover {
+.close-session:hover,
+.Home-button:hover {
   background-color: var(--botones);
 }
 

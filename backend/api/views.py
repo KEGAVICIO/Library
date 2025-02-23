@@ -88,26 +88,52 @@ def register_user(request):
 #para consultar los usuarios
 @api_view(["GET"])
 def get_users(request):
-    # Consultar todos los usuarios en la base de datos
+    username = request.GET.get("username", "").strip()
+    email = request.GET.get("email", "").strip()
+    perfil = request.GET.get("perfil", "").strip()
+    estado = request.GET.get("estado", "").strip()
+
+    perfil = ROLES_MAP.get(perfil)
+
+    query = """
+        SELECT Usuario, Correo, Perfil, Estado 
+        FROM usuarios 
+        WHERE 1=1
+    """
+    params = []
+
+    if username:
+        query += " AND Usuario LIKE %s"
+        params.append(f"%{username}%")
+    
+    if email:
+        query += " AND Correo LIKE %s"
+        params.append(f"%{email}%")
+    
+    if perfil:
+        query += " AND Perfil = %s"
+        params.append(perfil)
+    
+    if estado:
+        query += " AND Estado = %s"
+        params.append(estado)
+
     with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT Usuario, Correo, Perfil, Contra, Estado 
-            FROM usuarios
-        """)
+        cursor.execute(query, params)
         users = cursor.fetchall()
 
-    # Convertir la respuesta a JSON
     user_list = [
         {
             "username": user[0],
             "email": user[1],
-            "perfil": DATS_MAP.get(str(user[2]), "Desconocido"),  # Convertir el número del perfil a texto
-            "estado": user[4]
+            "perfil": DATS_MAP.get(str(user[2]), "Desconocido"),
+            "estado": user[3]
         }
         for user in users
     ]
 
     return Response(user_list, status=200)
+
 
 # Actualizar usuario
 @api_view(["PUT"])
