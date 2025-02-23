@@ -4,6 +4,7 @@ import Books from "../views/Books/Books";
 import Register from "../views/Register/Register";
 import SearchBar from "../components/searchbar/SearchBar";
 import Settings from "../views/Settings/Settings";
+import Perfil from "../views/Perfil/Perfil";
 
 function AppContent() {
     const location = useLocation(); // Obtiene la ruta actual
@@ -22,6 +23,7 @@ function AppContent() {
                 <Route path="/registre" element={<Register />} />
                 <Route path="/books" element={<Books />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/profile" element={<Perfil />}/>
             </Routes>
         </div>
     );

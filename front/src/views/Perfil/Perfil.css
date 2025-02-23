@@ -1,0 +1,22 @@
+/* Contenedor principal del perfil */
+.space {
+    width: 100%;
+    display: flex;
+    /*margin-top: 33px; /* Ajusta esto según la altura de la barra de búsqueda */
+    /*height: calc(100vh - 33px); /* Usa `100vh` en lugar de `100%` para asegurar altura correcta */
+    overflow: hidden; /* Evita el desplazamiento */
+}
+
+.perfil-card{
+    display: flex;
+    height: 90%;
+    width: 95%;
+    background-color: var(--fondooscuro);
+    justify-content: center;
+    border-radius: 10px;
+    overflow: auto; /* Permite scroll si hay muchas tarjetas */
+}
+
+.Titulo {
+    font-size: 40px;
+}

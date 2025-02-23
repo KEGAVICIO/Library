@@ -1,4 +1,3 @@
-/* Asegura que `html` y `body` ocupen toda la pantalla sin scroll */
 html, body {
     height: 100%;
     margin: 0;
@@ -20,9 +19,10 @@ html, body {
 /* Contenedor de columnas */
 .columns {
     display: flex;
-    width: 100%;
+    width: 98%;
     height: 90%; /* Usa 100% para que se ajuste correctamente */
     gap: 15px;
+    background-color: var(--fondo);
 }
 
 /* Columna izquierda (70%) */
@@ -37,6 +37,22 @@ html, body {
     gap: 10px 15px; /* Espaciado entre tarjetas: 10px entre filas y 15px entre columnas */
 }
 
+.filters {
+    height: 40px;
+    width: 100%; /* Hace que los divs ocupen todo el ancho disponible */
+    display: flex;
+}
+
+.filters input,
+.filters select {
+    flex: 1; /* Hace que los elementos dentro del div ocupen todo el espacio disponible */
+    width: 100%; /* Asegura que los inputs y selects ocupen todo el ancho */
+    padding: 10px; /* Espaciado interno para mejor apariencia */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
 .card {
     background-color: var(--fondo);
     color: var(--letters);
@@ -44,6 +60,7 @@ html, body {
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     min-width: 180px; /* Ancho mínimo */
+    height: 90px;
     max-width: 200px; /* Limita el tamaño máximo */
     text-align: center; /* Centra el texto */
     display: flex;
@@ -130,3 +147,27 @@ html, body {
     color: #bbb; /* Letra más tenue */
     opacity: 0.7;
 }
+
+.alert-box {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(50, 50, 50, 0.9);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1000;
+  }
+  
+  .alert-box.success {
+    background-color: #4caf50; /* Verde */
+  }
+  
+  .alert-box.error {
+    background-color: #f44336; /* Rojo */
+  }
+  

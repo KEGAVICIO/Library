@@ -25,12 +25,17 @@ function SearchBar({ onSearch }) {
         <button className="search-button" onClick={handleSearch}>
           <span className="material-icons">search</span>
         </button>
+        <button className="Home-button">
+          <span class="material-icons"
+          onClick={()=> navigate("/books")}>book</span>
+        </button>
         { (userProfile === 1 || userProfile === 2) && ( 
         <button className="upload-button">
           <span className="material-icons">file_upload</span>
         </button>
         )}
-        <button className="profile-button">
+        <button className="profile-button"
+          onClick={()=> navigate("/profile")}>
           <span className="material-icons">account_circle</span>
         </button>
         {userProfile === 1 && ( // Solo muestra el botón si el usuario es admin
