@@ -10,6 +10,7 @@ function Settings() {
   const [errorMessage, setErrorMessage] = useState(""); // Mensajes de error
   const [isEditing, setIsEditing] = useState(false); // Modo edición
   const [userState, setUserState] = useState(null);
+  const [usuarioAlt, setUsuarioAlt] = useState(""); // Usuario que realiza la acción
 
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(""); // "success" o "error"
@@ -22,6 +23,10 @@ function Settings() {
 
 
   useEffect(() => {  
+    const loggedUser = localStorage.getItem("usuario");
+    if (loggedUser) {
+      setUsuarioAlt(loggedUser.toUpperCase());
+    }
     fetchAllUsers(); // Llama a la función al cargar la página
   }, []);
   const fetchAllUsers = async () => {
