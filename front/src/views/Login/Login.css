@@ -1,113 +1,118 @@
 /* Contenedor principal */
-.space {
+.Login-space {
     position: absolute;
-    top: 50%; /* Centra verticalmente */
-    left: 50%; /* Centra horizontalmente */
-    transform: translate(-50%, -50%); /* Ajusta para que el contenedor se centre perfectamente */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%; /* Asegura que ocupe toda la pantalla */
-}
-
-/* Logo de la biblioteca */
-.logo {
+    height: 100%;
+  }
+  
+  /* Logo de la biblioteca */
+  .Login-logo {
     font-size: 50px;
     font-weight: bold;
     color: var(--letters);
-    margin-bottom: 20px; /* Separación entre el logo y el formulario */
-}
-
-/* Contenedor del login */
-.login-container {
+    margin-bottom: 20px;
+  }
+  
+  /* Contenedor del login */
+  .Login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-/* Formulario */
-.login-form {
+  }
+  
+  /* Formulario */
+  .Login-form {
     background: var(--fondooscuro);
-    padding: 35px; /* Más espacio interno */
+    padding: 35px;
     border-radius: 12px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
     text-align: center;
-    width: 50vw;  /* 50% del ancho de la pantalla */
+    width: 50vw;
     min-width: 320px;
     max-width: 500px;
-}
-
-/* Ajuste del título para que no esté tan separado del top */
-.pestana {
-    margin-top: 0; /* Elimina el margen superior */
+  }
+  
+  /* Título del formulario */
+  .Login-pestana {
+    margin-top: 0;
     margin-bottom: 20px;
     font-size: 50px;
     color: var(--black);
-}
-
-/* Contenedor de los inputs */
-.input-group {
+  }
+  
+  /* Contenedor de los inputs */
+  .Login-input-group {
     display: flex;
     justify-content: center;
     width: 100%;
-}
-
-/* Estilos de los inputs */
-.login-form input {
+  }
+  
+  /* Estilos de los inputs */
+  .Login-input-group input {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
     margin: 8px 0;
-}
-
-/* Contenedor de los botones */
-.button-group {
+  }
+  
+  /* Contenedor de los botones */
+  .Login-button-group {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-top: 15px;
-}
-
-/* Botón de Ingresar */
-.button-group button {
+  }
+  
+  /* Botón de Ingresar */
+  .Login-button-submit {
     width: 48%;
     padding: 12px;
     border: none;
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
+    background-color: var(--terracota);
+    color: white;
     transition: background-color 0.3s ease;
-}
-
-/* Botón de Ingresar */
-.button-group button[type="submit"] {
+  }
+  
+  /* Botón de Registrarse */
+  .Login-button-register {
+    width: 48%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
     background-color: var(--terracota);
     color: white;
-}
-
-/* Botón de Registrarse */
-.button-group .Registrarse {
-    background-color: var(--terracota);
-    color: white;
-}
-
-/* Efecto hover en botones */
-.button-group button:hover {
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Efecto hover en botones */
+  .Login-button-group button:hover {
     opacity: 0.8;
-}
-
-.error-message {
+  }
+  
+  /* Mensaje de error */
+  .Login-error-message {
     color: red;
     font-size: 20px;
     text-align: center;
-}
-
-.input-error {
+  }
+  
+  /* Estilo para campos con error */
+  .Login-input-error {
     border: 2px solid red;
     background-color: #ffe6e6;
-}
+  }

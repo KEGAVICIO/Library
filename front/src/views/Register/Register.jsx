@@ -48,70 +48,63 @@ function Register() {
   
 
   return (
-    <div className="space">
-      <div className="logo">
-        <span>BIBLIOTECA.KOM</span>
+    <div className="Register-space">
+      <div className="Register-logo">
+          <span>BIBLIOTECA.KOM</span>
       </div>
-
-      <div className="register-container">
-        <form onSubmit={handleRegister} className="register-form">
-          <h2 className="pestana">Regístrate</h2>
-          
-          {/* Muestra el mensaje de error si existe */}
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-          <div className="input-group">
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value.toUpperCase())}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <input
-              type="email"
-              placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="">Selecciona un rol</option>
-              <option value="visitante">Visitante</option>
-              <option value="lector">Lector</option>
-              <option value="editor">Editor</option>
-            </select>
-          </div>
-
-          <div className="button-group">
-            <button type="submit">Registrarse</button>
-            <button
-              type="button"
-              className="volver"
-              onClick={() => navigate("/")}
-            >
-              Volver
-            </button>
-          </div>
-        </form>
+      <div className="Register-container">
+          <form onSubmit={handleRegister} className="Register-form">
+              <h2 className="Register-tab">Regístrate</h2>
+              {/* Muestra el mensaje de error si existe */}
+              {errorMessage && <p className="Register-error-message">{errorMessage}</p>}
+              <div className="Register-input-group">
+                  <input
+                      type="text"
+                      placeholder="Usuario"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value.toUpperCase())}
+                      required
+                  />
+              </div>
+              <div className="Register-input-group">
+                  <input
+                      type="email"
+                      placeholder="Correo electrónico"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                  />
+              </div>
+              <div className="Register-input-group">
+                  <input
+                      type="password"
+                      placeholder="Contraseña"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                  />
+              </div>
+              <div className="Register-input-group">
+                  <select value={role} onChange={(e) => setRole(e.target.value)}>
+                      <option value="">Selecciona un rol</option>
+                      <option value="visitante">Visitante</option>
+                      <option value="lector">Lector</option>
+                      <option value="editor">Editor</option>
+                  </select>
+              </div>
+              <div className="Register-button-group">
+                  <button type="submit" className="Register-new">Registrarse</button>
+                  <button
+                      type="button"
+                      className="Register-back"
+                      onClick={() => navigate("/")}
+                  >
+                      Volver
+                  </button>
+              </div>
+          </form>
       </div>
-    </div>
+  </div>
   );
 }
 

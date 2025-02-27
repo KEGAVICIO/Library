@@ -10,70 +10,66 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
     const response = await fetch("http://127.0.0.1:8000/api/login/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-  
     const data = await response.json();
-  
     if (response.ok) {
-      //enviar a la searchbar
       localStorage.setItem("perfil", data.perfil);
       localStorage.setItem("usuario", data.usuario);
-
-      
-      navigate("/books"); // Redirige si el login es exitoso
+      navigate("/books");
     } else {
-      setErrorMessage("No se puede iniciar sessión"); // Muestra el mensaje de error
-      setUsername(""); // Borra el campo usuario
-      setPassword(""); // Borra el campo contraseña
+      setErrorMessage("No se puede iniciar sessión");
+      setUsername("");
+      setPassword("");
     }
   };
-  
 
   return (
-    <div className="space">
-        <div className="logo">
-            <span>BIBLIOTECA.KOM</span>
-        </div>
-
-        <div className="login-container">
-            <form onSubmit={handleLogin} className="login-form">
-                <h2 className="pestana">Inicia Sesión</h2>
-
-                {/* Muestra el mensaje de error debajo de los botones si hay error */}
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-                <div className="input-group">
-                <input
-                    type="text"
-                    placeholder="Usuario"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value.toUpperCase())}
-                />
-                </div>
-
-                <div className="input-group">
-                <input
-                    type="password"
-                    placeholder="Contraseña"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                </div>
-
-                <div className="button-group">
-                <button type="submit">Ingresar</button>
-                <button type="button" 
-                  className="Registrarse" 
-                  onClick={() => navigate("/registre")}>
-                    Registrarse </button>
-                </div>
-            </form>
-        </div>
+    <div className="Login-space">
+      <div className="Login-logo">
+        <span>BIBLIOTECA.KOM</span>
+      </div>
+      <div className="Login-container">
+        <form onSubmit={handleLogin} className="Login-form">
+          <h2 className="Login-pestana">Inicia Sesión</h2>
+          {errorMessage && (
+            <p className="Login-error-message">{errorMessage}</p>
+          )}
+          <div className="Login-input-group">
+            <input
+              type="text"
+              placeholder="Usuario"
+              value={username}
+              onChange={(e) => setUsername(e.target.value.toUpperCase())}
+              className="Login-input"
+            />
+          </div>
+          <div className="Login-input-group">
+            <input
+              type="password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="Login-input"
+            />
+          </div>
+          <div className="Login-button-group">
+            <button type="submit" className="Login-button-submit">
+              Ingresar
+            </button>
+            <button
+              type="button"
+              className="Login-button-register"
+              onClick={() => navigate("/registre")}
+            >
+              Registrarse
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

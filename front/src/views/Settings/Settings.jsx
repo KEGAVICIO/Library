@@ -203,149 +203,52 @@ function Settings() {
   };
 
   return (
-    <div className="space">
-      <div className="columns">
-        <div className="left-column">
-          <div className="filters">
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={filterUsername}
-              onChange={(e) => {
-                setFilterUsername(e.target.value);
-                // Forzar la actualización inmediata cuando se borra el texto
-                if (!e.target.value) {
-                  fetchAllUsers();
-                }
-              }}
-              onBlur={fetchFilteredUsers}
-            />
-          </div>
-          <div className="filters">
-            <input
-              type="email"
-              placeholder="Correo electrónico"
-              value={filterEmail}
-              onChange={(e) => {
-                setFilterEmail(e.target.value);
-                if (!e.target.value){
-                  fetchAllUsers();
-                }
-              }}
-              onBlur={fetchFilteredUsers}
-            />
-          </div>
-          <div className="filters">
-            <select
-              value={filterRole}
-              onChange={(e) => {
-                setFilterRole(e.target.value);
-                if (!e.target.value){
-                  fetchAllUsers();
-                }
-              }}
-              onBlur={fetchFilteredUsers}
-            >
-              <option value="">Selecciona un rol</option>
-              <option value="visitante">Visitante</option>
-              <option value="lector">Lector</option>
-              <option value="editor">Editor</option>
-              <option value="administrador">Administrador</option>
-            </select>
-          </div>
-          <div className="filters">
-            <label>
-              <input
-                type="checkbox"
-                checked={filterUserState === "1"}
-                onChange={(e) => {
-                  const newState = e.target.checked ? "1" : null;
-                  setFilterUserState(newState);
-                  if (!newState){
-                    fetchAllUsers();
-                  }
-                }}
-                onBlur={fetchFilteredUsers}
-              />
-              Eliminados
-            </label>
-
-            <label>
-              <input
-                type="checkbox"
-                checked={filterUserState === "0"}
-                onChange={(e) => {
-                  const newState = e.target.checked ? "0" : null;
-                  setFilterUserState(newState);
-                  if (!newState){
-                    fetchAllUsers();
-                  }
-                }}
-                onBlur={fetchFilteredUsers}
-              />
-              Activos
-            </label>
-          </div>
-
-          {users.map((user, index) => (
-            <div 
-            className={`card ${user.estado === "1" ? "inactive" : ""}`} 
-            key={index} 
-            onClick={() => handleCardClick(user)}>
-              <p className="dcard">
-                <span className="material-icons">account_circle</span>{" "}
-                <strong>{user.username}</strong>
-              </p>
-              <p className="dcard">
-                <span className="material-icons">email</span> {user.email}
-              </p>
-              <p className="dcard">
-                <span className="material-icons">privacy_tip</span> {user.perfil}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="right-column">
-          <div className="dats">
-            <h2>{isEditing ? "Actualizar usuario" : "Registrar usuario"}</h2>
-          </div>
-            {alertMessage && (
-            <div className={`alert-box ${alertType}`}>
-              {alertMessage}
-            </div>
-            )}
-          <form onSubmit={handleSubmit}>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-            <div className="input-group">
+    <div className="Setting-espacio">
+      <div className="Settings-space">
+        <div className="Settings-columns">
+          <div className="Settings-left-column">
+            <div className="Settings-filters">
               <input
                 type="text"
                 placeholder="Usuario"
-                value={username}
-                onChange={(e) => setUsername(e.target.value.toUpperCase())}
-                required
+                value={filterUsername}
+                onChange={(e) => {
+                  setFilterUsername(e.target.value);
+                  if (!e.target.value) {
+                    fetchAllUsers();
+                  }
+                }}
+                onBlur={fetchFilteredUsers}
+                className="Settings-input"
               />
             </div>
-            <div className="input-group">
+            <div className="Settings-filters">
               <input
                 type="email"
                 placeholder="Correo electrónico"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                value={filterEmail}
+                onChange={(e) => {
+                  setFilterEmail(e.target.value);
+                  if (!e.target.value) {
+                    fetchAllUsers();
+                  }
+                }}
+                onBlur={fetchFilteredUsers}
+                className="Settings-input"
               />
             </div>
-            <div className="input-group">
-              <input
-                type="password"
-                placeholder= {isEditing ? "Cambiar Contraseña" : "Contraseña"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="input-group">
-              <select value={role} onChange={(e) => setRole(e.target.value)} required>
+            <div className="Settings-filters">
+              <select
+                value={filterRole}
+                onChange={(e) => {
+                  setFilterRole(e.target.value);
+                  if (!e.target.value) {
+                    fetchAllUsers();
+                  }
+                }}
+                onBlur={fetchFilteredUsers}
+                className="Settings-select"
+              >
                 <option value="">Selecciona un rol</option>
                 <option value="visitante">Visitante</option>
                 <option value="lector">Lector</option>
@@ -353,17 +256,153 @@ function Settings() {
                 <option value="administrador">Administrador</option>
               </select>
             </div>
-
-            <div className="botones">
-              <button type="submit" className="button" disabled={userState === 1}
-                style={{ cursor: userState === 1 ? "not-allowed" : "pointer", opacity: userState === 1 ? 0.5 : 1 }}>
-                {isEditing ? "Actualizar" : "Registrar"}</button>
-              <button type="button" className="button" onClick={handleToggleUserState} disabled={!isEditing}
-                style={{ cursor: !isEditing ? "not-allowed" : "pointer", opacity: !isEditing ? 0.5 : 1 }}>
-                {userState === 0 ? "Eliminar" : "Activar"}</button>
-              <button type="button" className="button" onClick={handleClear}>Limpiar</button>
+            <div className="Settings-filters">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={filterUserState === "1"}
+                  onChange={(e) => {
+                    const newState = e.target.checked ? "1" : null;
+                    setFilterUserState(newState);
+                    if (!newState) {
+                      fetchAllUsers();
+                    }
+                  }}
+                  onBlur={fetchFilteredUsers}
+                  className="Settings-input"
+                />
+                Eliminados
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={filterUserState === "0"}
+                  onChange={(e) => {
+                    const newState = e.target.checked ? "0" : null;
+                    setFilterUserState(newState);
+                    if (!newState) {
+                      fetchAllUsers();
+                    }
+                  }}
+                  onBlur={fetchFilteredUsers}
+                  className="Settings-input"
+                />
+                Activos
+              </label>
             </div>
-          </form>
+
+            {users.map((user, index) => (
+              <div 
+                className={`Settings-card ${user.estado === "1" ? "Settings-card-inactive" : ""}`} 
+                key={index} 
+                onClick={() => handleCardClick(user)}
+              >
+                <p className="Settings-dcard">
+                  <span className="material-icons">account_circle</span>{" "}
+                  <strong>{user.username}</strong>
+                </p>
+                <p className="Settings-dcard">
+                  <span className="material-icons">email</span> {user.email}
+                </p>
+                <p className="Settings-dcard">
+                  <span className="material-icons">privacy_tip</span> {user.perfil}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="Settings-right-column">
+            <div className="Settings-dats">
+              <h2>{isEditing ? "Actualizar usuario" : "Registrar usuario"}</h2>
+            </div>
+            
+            {alertMessage && (
+              <div className={`Settings-alert-box ${alertType}`}>
+                {alertMessage}
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit}>
+              {errorMessage && <p className="Settings-error-message">{errorMessage}</p>}
+              
+              <div className="Settings-input-group">
+                <input
+                  type="text"
+                  placeholder="Usuario"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value.toUpperCase())}
+                  required
+                  className="Settings-input"
+                />
+              </div>
+              <div className="Settings-input-group">
+                <input
+                  type="email"
+                  placeholder="Correo electrónico"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="Settings-input"
+                />
+              </div>
+              <div className="Settings-input-group">
+                <input
+                  type="password"
+                  placeholder={isEditing ? "Cambiar Contraseña" : "Contraseña"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="Settings-input"
+                />
+              </div>
+              <div className="Settings-input-group">
+                <select 
+                  value={role} 
+                  onChange={(e) => setRole(e.target.value)} 
+                  required
+                  className="Settings-select"
+                >
+                  <option value="">Selecciona un rol</option>
+                  <option value="visitante">Visitante</option>
+                  <option value="lector">Lector</option>
+                  <option value="editor">Editor</option>
+                  <option value="administrador">Administrador</option>
+                </select>
+              </div>
+
+              <div className="Settings-botones">
+                <button 
+                  type="submit" 
+                  className="Settings-button-submit"
+                  disabled={userState === 1}
+                  style={{ 
+                    cursor: userState === 1 ? "not-allowed" : "pointer", 
+                    opacity: userState === 1 ? 0.5 : 1 
+                  }}
+                >
+                  {isEditing ? "Actualizar" : "Registrar"}
+                </button>
+                <button 
+                  type="button" 
+                  className="Settings-button-back"
+                  onClick={handleToggleUserState} 
+                  disabled={!isEditing}
+                  style={{ 
+                    cursor: !isEditing ? "not-allowed" : "pointer", 
+                    opacity: !isEditing ? 0.5 : 1 
+                  }}
+                >
+                  {userState === 0 ? "Eliminar" : "Activar"}
+                </button>
+                <button 
+                  type="button" 
+                  className="Settings-button-clear"
+                  onClick={handleClear}
+                >
+                  Limpiar
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
