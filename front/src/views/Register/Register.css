@@ -1,5 +1,5 @@
 /* Contenedor principal */
-.space {
+.Register-space {
     position: absolute;
     top: 50%; /* Centra verticalmente */
     left: 50%; /* Centra horizontalmente */
@@ -13,21 +13,21 @@
 }
 
 /* Logo de la biblioteca */
-.logo {
+.Register-logo {
     font-size: 50px;
     font-weight: bold;
     color: var(--letters);
     margin-bottom: 20px; /* Separación entre el logo y el formulario */
 }
 
-.register-container {
+.Register-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.register-form {
+.Register-form {
     background: var(--fondooscuro);
     padding: 35px; /* Más espacio interno */
     border-radius: 12px;
@@ -38,7 +38,7 @@
     max-width: 500px;
 }
 
-.pestana {
+.Register-tab {
     margin-top: 0; /* Elimina el margen superior */
     margin-bottom: 20px;
     font-size: 50px;
@@ -46,13 +46,13 @@
 }
 
 /* Contenedor de los inputs */
-.input-group {
+.Register-input-group {
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
-.input-group select {
+.Register-input-group select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -64,8 +64,7 @@
     cursor: pointer;
 }
 
-
-.register-form input{
+.Register-form input {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -75,25 +74,37 @@
 }
 
 /* Contenedor de los botones */
-.button-group {
+.Register-button-group {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-top: 15px;
 }
 
-.error-message {
+.Register-new,
+.Register-back {
+    width: 48%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--terracota);
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.Register-error-message {
     color: red;
     font-size: 20px;
     text-align: center;
 }
 
-.input-error {
+.Register-input-error {
     border: 2px solid red;
     background-color: #ffe6e6;
 }
 
-.volver {
-    color: white;
-    background-color: var(--terracota);
+.Register-button-group button:hover {
+    opacity: 0.8;
 }

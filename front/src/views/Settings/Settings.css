@@ -1,110 +1,114 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* Evita el desplazamiento global */
-}
-
-/* Contenedor principal ocupa el 95% del ancho de la pantalla */
-.space {
-    width: 95%;
+.Setting-espacio {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 87%;
+    width: 98%;
+    margin-top: 80px;
+    margin-left: 13px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 33px; /* Ajusta esto según la altura de la barra de búsqueda */
-    height: calc(100vh - 33px); /* Usa `100vh` en lugar de `100%` para asegurar altura correcta */
-    overflow: hidden; /* Evita el desplazamiento */
-}
+    justify-content: flex-start; /* Cambiado de center a flex-start */
+    overflow: hidden;
+  }
 
-/* Contenedor de columnas */
-.columns {
+/* Contenedor principal ocupa el 95% del ancho de la pantalla */
+.Settings-space {
+    width: 100%;
     display: flex;
-    width: 98%;
-    height: 90%; /* Usa 100% para que se ajuste correctamente */
-    gap: 15px;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  /* Contenedor de columnas */
+  .Settings-columns {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
     background-color: var(--fondo);
-}
-
-/* Columna izquierda (70%) */
-.left-column {
+  }
+  
+  /* Columna izquierda (70%) */
+  .Settings-left-column {
     flex: 7;
     background-color: var(--fondooscuro);
     padding: 20px;
     border-radius: 8px;
-    overflow: auto; /* Permite scroll si hay muchas tarjetas */
+    overflow: auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas de igual tamaño */
-    gap: 10px 15px; /* Espaciado entre tarjetas: 10px entre filas y 15px entre columnas */
-}
-
-.filters {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px 15px;
+  }
+  
+  .Settings-filters {
     height: 40px;
-    width: 100%; /* Hace que los divs ocupen todo el ancho disponible */
+    width: 100%;
     display: flex;
-}
-
-.filters input,
-.filters select {
-    flex: 1; /* Hace que los elementos dentro del div ocupen todo el espacio disponible */
-    width: 100%; /* Asegura que los inputs y selects ocupen todo el ancho */
-    padding: 10px; /* Espaciado interno para mejor apariencia */
+  }
+  
+  .Settings-filters input,
+  .Settings-filters select {
+    flex: 1;
+    width: 100%;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
-}
-
-.card {
+  }
+  
+  .Settings-card {
     background-color: var(--fondo);
     color: var(--letters);
-    padding: 15px; /* Ajusta el padding dentro de la tarjeta para más espacio */
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-    min-width: 180px; /* Ancho mínimo */
+    min-width: 180px;
     height: 90px;
-    max-width: 200px; /* Limita el tamaño máximo */
-    text-align: center; /* Centra el texto */
+    max-width: 200px;
+    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: left; /* Alinea el contenido horizontalmente al centro */
-    justify-content: center; /* Centra el contenido verticalmente */
-    margin: 0; /* Asegura que no haya márgenes adicionales */
-}
-
-.dcard {
+    align-items: left;
+    justify-content: center;
+    margin: 0;
+  }
+  
+  .Settings-dcard {
     display: flex;
-    align-items: center; /* Centra verticalmente el icono y el texto */
-    gap: 8px; /* Ajusta el espacio entre el icono y el texto */
-    margin: 5px 0; /* Espaciado entre las líneas */
-}
-
-
-/* Columna derecha (30%) */
-.right-column {
+    align-items: center;
+    gap: 8px;
+    margin: 5px 0;
+  }
+  
+  /* Columna derecha (30%) */
+  .Settings-right-column {
     flex: 3;
     background-color: var(--fondooscuro);
     padding: 20px;
     border-radius: 8px;
-    overflow: auto; /* Si hay contenido grande, solo esta columna tendrá scroll */
-    
+    overflow: auto;
     display: flex;
-    flex-direction: column; /* Organiza los elementos en columna */
+    flex-direction: column;
     align-items: stretch;
-}
-
-.dats {
+  }
+  
+  .Settings-dats {
     font-size: 30px;
     padding-left: 30px;
-}
-
-/* Contenedor de los inputs */
-.input-group {
+  }
+  
+  .Settings-input-group {
     display: flex;
     justify-content: center;
     width: 100%;
-}
-
-.input-group input,
-.input-group select {
+  }
+  
+  .Settings-input-group input,
+  .Settings-input-group select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -112,19 +116,19 @@ html, body {
     font-size: 16px;
     margin: 8px 0;
     background: white;
-    appearance: none; /* Oculta la flecha nativa en algunos navegadores */
+    appearance: none;
     cursor: pointer;
-}
-
-.botones {
+  }
+  
+  .Settings-botones {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
     margin-top: 15px;
-}
-
-.botones button {
+  }
+  
+  .Settings-botones button {
     width: 100%;
     padding: 12px;
     border: none;
@@ -134,21 +138,19 @@ html, body {
     background-color: var(--terracota);
     color: white;
     transition: background-color 0.3s ease;
-}
-
-.button:hover {
+  }
+  
+  .Settings-button:hover {
     opacity: 0.8;
-}
-
-
-/* Cambia el color de las tarjetas de usuarios inactivos */
-.card.inactive {
-    background-color: #444; /* Un gris oscuro */
-    color: #bbb; /* Letra más tenue */
+  }
+  
+  .Settings-card-inactive {
+    background-color: #444;
+    color: #bbb;
     opacity: 0.7;
-}
-
-.alert-box {
+  }
+  
+  .Settings-alert-box {
     position: fixed;
     top: 20px;
     left: 50%;
@@ -163,11 +165,10 @@ html, body {
     z-index: 1000;
   }
   
-  .alert-box.success {
-    background-color: #4caf50; /* Verde */
+  .Settings-alert-box.success {
+    background-color: #4caf50;
   }
   
-  .alert-box.error {
-    background-color: #f44336; /* Rojo */
+  .Settings-alert-box.error {
+    background-color: #f44336;
   }
-  
