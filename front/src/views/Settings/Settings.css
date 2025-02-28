@@ -128,7 +128,9 @@
     margin-top: 15px;
   }
   
-  .Settings-botones button {
+  .Settings-button-submit,
+  .Settings-button-back,
+  .Settings-button-clear {
     width: 100%;
     padding: 12px;
     border: none;
@@ -140,10 +142,17 @@
     transition: background-color 0.3s ease;
   }
   
-  .Settings-button:hover {
-    opacity: 0.8;
+  .Settings-button-back:hover,
+  .Settings-button-clear:hover{
+    opacity: 0.8 !important;
+    transform: scale(1.05); /* Pequeño efecto de agrandamiento */
   }
   
+  .Settings-button-submit:hover {
+    opacity: 0.8 !important; /* Un tono más oscuro de terracota */
+    transform: scale(1.05);
+}
+
   .Settings-card-inactive {
     background-color: #444;
     color: #bbb;

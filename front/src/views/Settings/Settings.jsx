@@ -11,6 +11,8 @@ function Settings() {
   const [isEditing, setIsEditing] = useState(false); // Modo edición
   const [userState, setUserState] = useState(null);
   const [usuarioAlt, setUsuarioAlt] = useState(""); // Usuario que realiza la acción
+  const [userId, setUserId] = useState(null); // Estado para almacenar el id del usuario
+
 
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(""); // "success" o "error"
@@ -77,7 +79,9 @@ function Settings() {
     setPassword(""); // Limpiar campo de contraseña
     setUserState(Number(user.estado));
     setIsEditing(true);
+    setUserId(user.id); // Añadir el ID
   };
+  
 
   const showAlert = (message, type) => {
     setAlertMessage(message);
@@ -108,7 +112,8 @@ function Settings() {
     const newState = userState === 0 ? 1 : 0; // Alternar entre activo e inactivo
   
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/users/${username}/`, {
+      console.log("no jalo")
+      const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -156,7 +161,7 @@ function Settings() {
 
     try {
       const url = isEditing
-        ? `http://127.0.0.1:8000/api/users/${username}/`
+        ? `http://127.0.0.1:8000/api/users/${userId}/`
         : "http://127.0.0.1:8000/api/register/";
 
       const method = isEditing ? "PUT" : "POST";
@@ -292,23 +297,23 @@ function Settings() {
             </div>
 
             {users.map((user, index) => (
-              <div 
-                className={`Settings-card ${user.estado === "1" ? "Settings-card-inactive" : ""}`} 
-                key={index} 
-                onClick={() => handleCardClick(user)}
-              >
-                <p className="Settings-dcard">
-                  <span className="material-icons">account_circle</span>{" "}
-                  <strong>{user.username}</strong>
-                </p>
-                <p className="Settings-dcard">
-                  <span className="material-icons">email</span> {user.email}
-                </p>
-                <p className="Settings-dcard">
-                  <span className="material-icons">privacy_tip</span> {user.perfil}
-                </p>
-              </div>
-            ))}
+            <div 
+              className={`Settings-card ${user.estado === "1" ? "Settings-card-inactive" : ""}`} 
+              key={index} 
+              onClick={() => handleCardClick(user)}
+            >
+              <p className="Settings-dcard">
+                <span className="material-icons">account_circle</span>{" "}
+                <strong>{user.username}</strong>
+              </p>
+              <p className="Settings-dcard">
+                <span className="material-icons">email</span> {user.email}
+              </p>
+              <p className="Settings-dcard">
+                <span className="material-icons">privacy_tip</span> {user.perfil}
+              </p>
+            </div>
+          ))}
           </div>
 
           <div className="Settings-right-column">

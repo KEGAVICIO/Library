@@ -5,5 +5,5 @@ urlpatterns = [
     path('login/', login_view),  # Nueva ruta para login
     path("register/", register_user, name="register"),
     path("users/", get_users, name="get_users"),
-    path("users/<str:username>/", update_user, name="update_user"),
+    path("users/<int:user_id>/", update_user, name="update_user"),
 ]
