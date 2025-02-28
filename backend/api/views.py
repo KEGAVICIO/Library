@@ -85,7 +85,7 @@ def register_user(request):
         return Response({"message": "Error al registrar usuario"}, status=400)
     
 
-#para consultar los usuarios
+# Modificar la función de obtener usuarios para incluir el ID
 @api_view(["GET"])
 def get_users(request):
     username = request.GET.get("username", "").strip()
@@ -96,7 +96,7 @@ def get_users(request):
     perfil = ROLES_MAP.get(perfil)
 
     query = """
-        SELECT Usuario, Correo, Perfil, Estado 
+        SELECT Id, Usuario, Correo, Perfil, Estado 
         FROM usuarios 
         WHERE 1=1
     """
@@ -124,10 +124,11 @@ def get_users(request):
 
     user_list = [
         {
-            "username": user[0],
-            "email": user[1],
-            "perfil": DATS_MAP.get(str(user[2]), "Desconocido"),
-            "estado": user[3]
+            "id": user[0],  # Aquí añadimos el ID
+            "username": user[1],
+            "email": user[2],
+            "perfil": DATS_MAP.get(str(user[3]), "Desconocido"),
+            "estado": user[4]
         }
         for user in users
     ]
@@ -137,7 +138,7 @@ def get_users(request):
 
 # Actualizar usuario
 @api_view(["PUT"])
-def update_user(request, username):
+def update_user(request, user_id):
     new_username = request.data.get("username", "").strip().upper()
     password = request.data.get("password", "").strip()
     email = request.data.get("email", "").strip()
@@ -152,28 +153,27 @@ def update_user(request, username):
 
     try:
         with connection.cursor() as cursor:
-            if estado is not None:  # Si se envía el estado, actualizarlo
+            if estado is not None:
                 cursor.execute("""
                     UPDATE usuarios 
                     SET Estado = %s, UsuarioAlt = %s
-                    WHERE Usuario = %s AND Correo = %s
-                """, [estado, usuario_alt, username, email])
-
+                    WHERE Id = %s
+                """, [estado, usuario_alt, user_id])
 
             elif password:
                 hashed_password = hashlib.sha256(password.encode()).hexdigest()
                 cursor.execute("""
                     UPDATE usuarios 
                     SET Usuario = %s, Contra = %s, Correo = %s, Perfil = %s, UsuarioAlt = %s
-                    WHERE Usuario = %s
-                """, [new_username, hashed_password, email, perfil, usuario_alt, username])
+                    WHERE Id = %s
+                """, [new_username, hashed_password, email, perfil, usuario_alt, user_id])
             else:
                 cursor.execute("""
                     UPDATE usuarios 
                     SET Usuario = %s, Correo = %s, Perfil = %s, UsuarioAlt = %s
-                    WHERE Usuario = %s
-                """, [new_username, email, perfil, usuario_alt, username])
+                    WHERE Id = %s
+                """, [new_username, email, perfil, usuario_alt, user_id])
 
         return Response({"message": "Usuario actualizado correctamente"}, status=200)
-    except Exception:
-        return Response({"message": "Error al actualizar usuario"}, status=400)
+    except Exception as e:
+        return Response({"message": f"Error al actualizar usuario: {str(e)}"}, status=400)

@@ -31,7 +31,8 @@ function SearchBar({ onSearch }) {
         </button>
         { (userProfile === 1 || userProfile === 2) && ( 
         <button className="upload-button">
-          <span className="material-icons">file_upload</span>
+          <span className="material-icons"
+          onClick={()=> navigate("/archive")}>file_upload</span>
         </button>
         )}
         <button className="profile-button"
