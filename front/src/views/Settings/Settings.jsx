@@ -31,6 +31,7 @@ function Settings() {
     }
     fetchAllUsers(); // Llama a la función al cargar la página
   }, []);
+  
   const fetchAllUsers = async () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/users/");
@@ -112,7 +113,6 @@ function Settings() {
     const newState = userState === 0 ? 1 : 0; // Alternar entre activo e inactivo
   
     try {
-      console.log("no jalo")
       const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

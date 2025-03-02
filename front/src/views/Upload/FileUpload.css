@@ -1,0 +1,50 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--fondo);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.modal-buttons {
+    margin-top: 15px;
+}
+
+.modal-close,
+.modal-subir,
+.modal-descargar {
+  width: 100%;
+  margin: 5px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: var(--terracota);
+  color: white;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  
+  /* Centrar el texto del botón */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-close:hover,
+.modal-subir:hover,
+.modal-descargar:hover{
+  opacity: 0.8;
+  transform: scale(1.05); /* Pequeño efecto de agrandamiento */
+}
