@@ -1,7 +1,10 @@
+import csv
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db import connection
 import hashlib
+import base64
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 #Diccionario de los perfiles
@@ -177,3 +180,163 @@ def update_user(request, user_id):
         return Response({"message": "Usuario actualizado correctamente"}, status=200)
     except Exception as e:
         return Response({"message": f"Error al actualizar usuario: {str(e)}"}, status=400)
+
+
+#--------------------------------------------------------------------------------------------------
+#               CARGA DE LIBROS
+#--------------------------------------------------------------------------------------------------
+@api_view(["POST"])
+def registrar_libro(request):
+    titulo = request.data.get("titulo", "").strip()
+    autor = request.data.get("autor", "").strip()
+    resena = request.data.get("resena", "").strip()
+    imagen = request.FILES.get("imagen")  # Recibir la imagen
+    usuario_alt = request.data.get("usuarioAlt", "SISTEMA").strip().upper()
+
+    # Validar campos obligatorios
+    if not titulo or not autor or not resena or not imagen:
+        return Response({"message": "Todos los campos son obligatorios"}, status=400)
+
+    # Leer la imagen en binario para almacenarla en MySQL
+    imagen_binario = imagen.read()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO libros (Titulo, Autor, Resena, Vistas, Estado, UsuarioAlt, Imagen)
+                VALUES (%s, %s, %s, 1, '0', %s, %s)
+                """,
+                [titulo, autor, resena, usuario_alt, imagen_binario]
+            )
+        return Response({"message": "Libro registrado exitosamente"}, status=201)
+    except Exception as e:
+        return Response({"message": f"Error al registrar libro: {str(e)}"}, status=400)
+
+@api_view(["GET"])
+def get_books(request):
+    titulo = request.GET.get("titulo", "").strip()
+    autor = request.GET.get("autor", "").strip()
+    estado = request.GET.get("estado", "").strip()
+
+    query = """
+        SELECT IdLibro, Titulo, Autor, Resena, Vistas, Estado, Imagen 
+        FROM libros 
+        WHERE 1=1
+    """
+    params = []
+
+    if titulo:
+        query += " AND Titulo LIKE %s"
+        params.append(f"%{titulo}%")
+    
+    if autor:
+        query += " AND Autor LIKE %s"
+        params.append(f"%{autor}%")
+    
+    if estado:
+        query += " AND Estado = %s"
+        params.append(estado)
+
+    with connection.cursor() as cursor:
+        cursor.execute(query, params)
+        books = cursor.fetchall()
+
+    book_list = [
+        {
+            "id": book[0],
+            "titulo": book[1],
+            "autor": book[2],
+            "resena": book[3],
+            "vistas": book[4],
+            "estado": book[5],
+            "imagen": base64.b64encode(book[6]).decode('utf-8') if book[6] else None
+        }
+        for book in books
+    ]
+
+    return Response(book_list, status=200)
+
+@api_view(["PUT"])
+def update_book(request, book_id):
+    titulo = request.data.get("titulo", "").strip()
+    autor = request.data.get("autor", "").strip()
+    resena = request.data.get("resena", "").strip()
+    usuario_alt = request.data.get("usuarioAlt", "SISTEMA").strip().upper()
+    estado = request.data.get("estado", None)
+    imagen = request.FILES.get("imagen", None)  # Obtiene la imagen si existe
+
+    if not titulo or not autor or not resena:
+        return Response({"message": "Título, autor y reseña son obligatorios"}, status=400)
+
+    try:
+        with connection.cursor() as cursor:
+            if imagen:
+                cursor.execute("""
+                    UPDATE libros
+                    SET Titulo = %s, Autor = %s, Resena = %s, Imagen = %s, UsuarioAlt = %s
+                    WHERE IdLibro = %s
+                """, [titulo, autor, resena, imagen.read(), usuario_alt, book_id])
+            elif estado is not None:
+                cursor.execute("""
+                    UPDATE libros
+                    SET Estado = %s, UsuarioAlt = %s
+                    WHERE IdLibro = %s
+                """, [estado, usuario_alt, book_id])
+            else:
+                cursor.execute("""
+                    UPDATE libros
+                    SET Titulo = %s, Autor = %s, Resena = %s, UsuarioAlt = %s
+                    WHERE IdLibro = %s
+                """, [titulo, autor, resena, usuario_alt, book_id])
+            
+        return Response({"message": "Libro actualizado correctamente"}, status=200)
+    except Exception as e:
+        return Response({"message": f"Error al actualizar libro: {str(e)}"}, status=400)
+
+@api_view(["POST"])
+def carga_masiva_libros(request):
+    archivo = request.FILES.get("file")  # Obtener el archivo CSV
+    usuario_alt = request.POST.get("usuarioAlt", "").strip()  # Obtener el usuarioAlt
+
+    print("Archivo es",archivo)
+    if not archivo:
+        return Response({"message": "No se proporcionó ningún archivo"}, status=400)
+
+    if not usuario_alt:
+        return Response({"message": "No se proporcionó el usuario alternativo (usuarioAlt)"}, status=400)
+
+    try:
+        # Leer el archivo CSV
+        file_content = archivo.read().decode("ISO-8859-1")  # Leer el contenido del archivo
+        reader = csv.DictReader(file_content.splitlines())  # Usar DictReader para tratarlo como un diccionario
+
+        for row in reader:
+            titulo = row.get("Titulo", "").strip()
+            autor = row.get("Autor", "").strip()
+            resena = row.get("Resena", "").strip()
+            imagen_base64 = row.get("Imagen", "").strip()  # Obtener la cadena Base64 de la imagen
+
+            if not titulo or not autor or not resena or not imagen_base64:
+                continue  # Si hay campos vacíos, saltamos este registro
+
+            # Decodificar la imagen de Base64
+            try:
+                imagen_binaria = base64.b64decode(imagen_base64.split(',')[1])  # Eliminar el prefijo "data:image/jpeg;base64,"
+            except Exception as e:
+                return Response({"message": f"Error al decodificar la imagen: {str(e)}"}, status=400)
+
+            # Insertar en la base de datos
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO libros (Titulo, Autor, Resena, UsuarioAlt, Imagen)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    [titulo, autor, resena, usuario_alt, imagen_binaria]
+                )
+
+        return Response({"message": "Libros registrados exitosamente"}, status=201)
+
+    except Exception as e:
+        return Response({"message": f"Error al procesar el archivo: {str(e)}"}, status=400)
