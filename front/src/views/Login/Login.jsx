@@ -19,6 +19,7 @@ function Login() {
     if (response.ok) {
       localStorage.setItem("perfil", data.perfil);
       localStorage.setItem("usuario", data.usuario);
+      localStorage.setItem("user_id", data.id);  // Almacenamos el id
       navigate("/books");
     } else {
       setErrorMessage("No se puede iniciar sessión");

@@ -1,29 +1,46 @@
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-    background: var(--fondo);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
+  background: var(--fondo);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative; /* Necesario para que el botón de cierre esté posicionado de forma absoluta */
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--black); /* Color de la X */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+  color: var(--terracota); /* Cambia el color cuando se pasa el mouse */
 }
 
 .modal-buttons {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
-.modal-close,
 .modal-subir,
-.modal-descargar {
+.modal-descargar,
+.modal-example {
   width: 100%;
   margin: 5px;
   padding: 12px;
@@ -34,17 +51,21 @@
   background-color: var(--terracota);
   color: white;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  
-  /* Centrar el texto del botón */
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.modal-close:hover,
 .modal-subir:hover,
-.modal-descargar:hover{
+.modal-descargar:hover,
+.modal-example:hover {
   opacity: 0.8;
-  transform: scale(1.05); /* Pequeño efecto de agrandamiento */
+  transform: scale(1.05);
+}
+
+.example-image {
+  max-width: 100%;  /* La imagen no será más ancha que el contenedor */
+    max-height: 150px;  /* La imagen no será más alta que 150px */
+    object-fit: cover;
 }

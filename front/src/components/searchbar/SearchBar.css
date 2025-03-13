@@ -58,3 +58,11 @@
 .material-icons{
   color: var(--terracota);
 }
+
+.user-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
