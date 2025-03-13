@@ -204,6 +204,17 @@ def registrar_libro(request):
         with connection.cursor() as cursor:
             cursor.execute(
                 """
+                SELECT * FROM libros WHERE Titulo = %s AND Autor = %s
+                """, 
+                [titulo, autor]
+            )
+            existing_book = cursor.fetchone()  # Verifica si ya existe un libro
+
+            if existing_book:
+                return Response({"message": "Este libro ya está registrado"}, status=400)
+
+            cursor.execute(
+                """
                 INSERT INTO libros (Titulo, Autor, Resena, Vistas, Estado, UsuarioAlt, Imagen)
                 VALUES (%s, %s, %s, 1, '0', %s, %s)
                 """,
@@ -259,7 +270,7 @@ def get_books(request):
 
 @api_view(["PUT"])
 def update_book(request, book_id):
-    titulo = request.data.get("titulo", "").strip()
+    titulo = request.data.get("titulo", "").strip().upper()
     autor = request.data.get("autor", "").strip()
     resena = request.data.get("resena", "").strip()
     usuario_alt = request.data.get("usuarioAlt", "SISTEMA").strip().upper()
@@ -299,7 +310,6 @@ def carga_masiva_libros(request):
     archivo = request.FILES.get("file")  # Obtener el archivo CSV
     usuario_alt = request.POST.get("usuarioAlt", "").strip()  # Obtener el usuarioAlt
 
-    print("Archivo es",archivo)
     if not archivo:
         return Response({"message": "No se proporcionó ningún archivo"}, status=400)
 
@@ -312,31 +322,122 @@ def carga_masiva_libros(request):
         reader = csv.DictReader(file_content.splitlines())  # Usar DictReader para tratarlo como un diccionario
 
         for row in reader:
-            titulo = row.get("Titulo", "").strip()
+            titulo = row.get("Titulo", "").strip().upper()
             autor = row.get("Autor", "").strip()
             resena = row.get("Resena", "").strip()
             imagen_base64 = row.get("Imagen", "").strip()  # Obtener la cadena Base64 de la imagen
 
-            if not titulo or not autor or not resena or not imagen_base64:
+            if not titulo or not autor or not resena:
                 continue  # Si hay campos vacíos, saltamos este registro
 
-            # Decodificar la imagen de Base64
+            # Verificar si ya existe el libro con el mismo título y autor
             try:
-                imagen_binaria = base64.b64decode(imagen_base64.split(',')[1])  # Eliminar el prefijo "data:image/jpeg;base64,"
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT * FROM libros WHERE Titulo = %s AND Autor = %s
+                        """, 
+                        [titulo, autor]
+                    )
+                    existing_book = cursor.fetchone()  # Verifica si ya existe un libro
+
+                    if existing_book:
+                        print(f"El libro '{titulo}' de {autor} ya está registrado. Se omite.")
+                        continue  # Si el libro ya está registrado, saltamos a la siguiente iteración
             except Exception as e:
-                return Response({"message": f"Error al decodificar la imagen: {str(e)}"}, status=400)
+                return Response({"message": f"Error al verificar el libro: {str(e)}"}, status=400)
+
+            # Decodificar la imagen de Base64, si está presente
+            imagen_binaria = None  # Asignar None si no hay imagen
+            if imagen_base64:
+                try:
+                    imagen_binaria = base64.b64decode(imagen_base64.split(',')[1])  # Eliminar el prefijo "data:image/jpeg;base64,"
+                except Exception as e:
+                    return Response({"message": f"Error al decodificar la imagen: {str(e)}"}, status=400)
 
             # Insertar en la base de datos
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    INSERT INTO libros (Titulo, Autor, Resena, UsuarioAlt, Imagen)
-                    VALUES (%s, %s, %s, %s, %s)
-                    """,
-                    [titulo, autor, resena, usuario_alt, imagen_binaria]
-                )
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        INSERT INTO libros (Titulo, Autor, Resena, UsuarioAlt, Imagen)
+                        VALUES (%s, %s, %s, %s, %s)
+                        """,
+                        [titulo, autor, resena, usuario_alt, imagen_binaria]
+                    )
+            except Exception as e:
+                return Response({"message": f"Error al insertar el libro: {str(e)}"}, status=400)
 
         return Response({"message": "Libros registrados exitosamente"}, status=201)
 
     except Exception as e:
         return Response({"message": f"Error al procesar el archivo: {str(e)}"}, status=400)
+
+#--------------------------------------------------------------------------------------------------
+#               Principal
+#--------------------------------------------------------------------------------------------------
+@api_view(["GET"])
+def get_mainbooks(request):
+    titulo = request.GET.get("titulo", "").strip()
+    autor = request.GET.get("autor", "").strip()
+    estado = request.GET.get("estado", "").strip()
+
+    query = """
+        SELECT IdLibro, Titulo, Autor, Resena, Vistas, Estado, Imagen 
+        FROM libros 
+        WHERE Estado = 0
+    """
+    params = []
+
+    if titulo:
+        query += " AND Titulo LIKE %s"
+        params.append(f"%{titulo}%")
+    
+    if autor:
+        query += " AND Autor LIKE %s"
+        params.append(f"%{autor}%")
+    
+    if estado:
+        query += " AND Estado = %s"
+        params.append(estado)
+
+    with connection.cursor() as cursor:
+        cursor.execute(query, params)
+        books = cursor.fetchall()
+
+    book_list = [
+        {
+            "id": book[0],
+            "titulo": book[1],
+            "autor": book[2],
+            "resena": book[3],
+            "vistas": book[4],
+            "estado": book[5],
+            "imagen": base64.b64encode(book[6]).decode('utf-8') if book[6] else None
+        }
+        for book in books
+    ]
+
+    return Response(book_list, status=200)
+
+#--------------------------------------------------------------------------------------------------
+#               Perfil
+#--------------------------------------------------------------------------------------------------
+@api_view(["GET"])
+def get_user(request, user_id):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT Id, Usuario, Correo, Perfil FROM usuarios WHERE Id = %s AND Estado = '0'",
+            [user_id]
+        )
+        user = cursor.fetchone()
+
+    if user:
+        return Response({
+            "id": user[0],
+            "usuario": user[1],
+            "correo": user[2],
+            "perfil": DATS_MAP.get(str(user[3]), "Desconocido"),
+        })
+    else:
+        return Response({"error": "Usuario no encontrado o inactivo"}, status=404)

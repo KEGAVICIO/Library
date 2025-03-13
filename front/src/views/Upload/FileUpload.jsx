@@ -46,7 +46,8 @@ function FileUpload({ onClose, onUpload }) {
 
     const downloadTemplate = () => {
         const template = [
-            ["Titulo", "Autor", "Resena", "Imagen"],  // Encabezados de columnas
+            ["Titulo", "Autor", "Resena", "Imagen"],
+            ["","","","Puedes dejarlo en blanco y despues llenarlo o copiar la direccion de la imagen de alguna en internet y pegarla completa"]  // Encabezados de columnas
         ];
 
         const csvContent = template.map((row) => row.join(",")).join("\n");
@@ -62,12 +63,16 @@ function FileUpload({ onClose, onUpload }) {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
+                {/* Botón de Cerrar X */}
+                <button className="modal-close" onClick={onClose}>X</button>
+
                 <h2>Carga Masiva de Libros</h2>
                 <input type="file" accept=".csv" onChange={handleFileChange} />
+                
                 <div className="modal-buttons">
                     <button onClick={handleUpload} className="modal-subir">Subir Archivo</button>
-                    <button onClick={onClose} className="modal-close">Cerrar</button>
                     <button onClick={downloadTemplate} className="modal-descargar">Descargar Plantilla CSV</button>
+                    <button className="modal-example">Ejemplo de plantilla</button>
                 </div>
             </div>
         </div>

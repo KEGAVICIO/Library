@@ -7,6 +7,7 @@ function SearchBar({ onSearch }) {
 
   // Leer el perfil del usuario desde localStorage
   const userProfile = parseInt(localStorage.getItem("perfil"),10);
+  const name = localStorage.getItem("usuario");
   const navigate = useNavigate();
   const handleSearch = () => {
     onSearch(query.trim().toLowerCase());
@@ -14,6 +15,7 @@ function SearchBar({ onSearch }) {
 
   return (
     <nav className="search-bar">
+      <div className="user-name"> {name} </div>
       <input
         type="text"
         placeholder="Buscar..."
