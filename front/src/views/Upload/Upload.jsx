@@ -172,23 +172,36 @@ function Upload() {
                 <div className="Upload-columns">
                 {alertMessage && <div className={`Upload-alert ${alertType}`}>{alertMessage}</div>}
                     <div className="Upload-left-column">
-                        <div className="Books-container">
-                        {books.map((book, index) => (
-                            <div key={index} className={`Book-card ${book.estado === "1" ? "Book-card-inactive" : ""}`}
-                                onClick={() => handleSelectBook(book)}>
-                                <img 
-                                    src={`data:image/png;base64,${book.imagen}`} 
-                                    alt={book.titulo} 
-                                    className="Book-image" 
-                                />
-                                <h3>{book.titulo}</h3>
-                                <p><strong>Autor:</strong> {book.autor}</p>
-                                <p><strong>Vistas:</strong>{book.vistas}</p>
-                            </div>
-                        ))}
+                        <div className="Upload-top-row">
+                            <input
+                                type="text"
+                                placeholder="Titulo"
+                                className="Upload-inputTitle"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Autor"
+                                className="Upload-inputAutor"
+                            />
                         </div>
-                    </div>
-
+                        <div className="Upload-bottom-row">
+                            <div className="Books-container">
+                            {books.map((book, index) => (
+                                <div key={index} className={`Book-card ${book.estado === "1" ? "Book-card-inactive" : ""}`}
+                                    onClick={() => handleSelectBook(book)}>
+                                    <img 
+                                        src={`data:image/png;base64,${book.imagen}`} 
+                                        alt={book.titulo} 
+                                        className="Book-image" 
+                                    />
+                                    <h3>{book.titulo}</h3>
+                                    <p><strong>Autor:</strong> {book.autor}</p>
+                                    <p><strong>Vistas:</strong>{book.vistas}</p>
+                                </div>
+                            ))}
+                                </div>
+                            </div>
+                        </div>
                     <div className="Upload-middle-column">
                         <div className="Upload-dats">
                             <h2 className="Upload-tittle">{editing ? "Actualizar Libro" : "Registrar Libro"}</h2>
