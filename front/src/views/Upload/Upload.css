@@ -36,11 +36,42 @@
     background-color: var(--fondooscuro);
     padding: 20px;
     border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .Upload-top-row {
+    display: flex; /* Cambia de grid a flex para un mejor control del espaciado */
+    gap: 15px; /* Espacio entre los elementos */
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.Upload-inputTitle,
+.Upload-inputAutor {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    margin: 8px 0;
+    background: white;
+    appearance: none;
+    cursor: pointer;
+}
+
+.Upload-bottom-row {
+    flex: 1; /* Ocupa el 90% del espacio restante */
+    border-radius: 8px;
     overflow: auto;
     display: flex;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px 15px;
-  }
+}
 
   .Books-container {
     display: flex;

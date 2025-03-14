@@ -212,7 +212,7 @@ function Settings() {
       <div className="Settings-space">
         <div className="Settings-columns">
           <div className="Settings-left-column">
-            <div className="Settings-filters">
+            <div className="Settings-top">
               <input
                 type="text"
                 placeholder="Usuario"
@@ -226,8 +226,6 @@ function Settings() {
                 onBlur={fetchFilteredUsers}
                 className="Settings-input"
               />
-            </div>
-            <div className="Settings-filters">
               <input
                 type="email"
                 placeholder="Correo electrónico"
@@ -241,8 +239,6 @@ function Settings() {
                 onBlur={fetchFilteredUsers}
                 className="Settings-input"
               />
-            </div>
-            <div className="Settings-filters">
               <select
                 value={filterRole}
                 onChange={(e) => {
@@ -260,8 +256,6 @@ function Settings() {
                 <option value="editor">Editor</option>
                 <option value="administrador">Administrador</option>
               </select>
-            </div>
-            <div className="Settings-filters">
               <label>
                 <input
                   type="checkbox"
@@ -274,7 +268,7 @@ function Settings() {
                     }
                   }}
                   onBlur={fetchFilteredUsers}
-                  className="Settings-input"
+                  className="Settings-check"
                 />
                 Eliminados
               </label>
@@ -290,30 +284,31 @@ function Settings() {
                     }
                   }}
                   onBlur={fetchFilteredUsers}
-                  className="Settings-input"
+                  className="Settings-check"
                 />
                 Activos
               </label>
             </div>
-
-            {users.map((user, index) => (
-            <div 
-              className={`Settings-card ${user.estado === "1" ? "Settings-card-inactive" : ""}`} 
-              key={index} 
-              onClick={() => handleCardClick(user)}
-            >
-              <p className="Settings-dcard">
-                <span className="material-icons">account_circle</span>{" "}
-                <strong>{user.username}</strong>
-              </p>
-              <p className="Settings-dcard">
-                <span className="material-icons">email</span> {user.email}
-              </p>
-              <p className="Settings-dcard">
-                <span className="material-icons">privacy_tip</span> {user.perfil}
-              </p>
+            <div className="Settings-bottom">
+              {users.map((user, index) => (
+              <div 
+                className={`Settings-card ${user.estado === "1" ? "Settings-card-inactive" : ""}`} 
+                key={index} 
+                onClick={() => handleCardClick(user)}
+              >
+                <p className="Settings-dcard">
+                  <span className="material-icons">account_circle</span>{" "}
+                  <strong>{user.username}</strong>
+                </p>
+                <p className="Settings-dcard">
+                  <span className="material-icons">email</span> {user.email}
+                </p>
+                <p className="Settings-dcard">
+                  <span className="material-icons">privacy_tip</span> {user.perfil}
+                </p>
+              </div>
+              ))}
             </div>
-          ))}
           </div>
 
           <div className="Settings-right-column">
